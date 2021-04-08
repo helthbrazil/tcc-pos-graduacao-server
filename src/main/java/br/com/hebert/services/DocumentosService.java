@@ -16,8 +16,8 @@ import com.amazonaws.services.s3.model.Bucket;
 @Service
 public class DocumentosService {
 
-	private static final String KEY = "AKIA2NLFPRXHA3CPRGFW";
-	private static final String SECRET_KEY = "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";
+	private static final String KEY = "asdasdasdasd";
+	private static final String SECRET_KEY = "asdasdasdasdasd";
 
 	/**
 	 * Cria uma instância do client S3 da AWS

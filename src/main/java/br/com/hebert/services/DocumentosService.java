@@ -27,9 +27,11 @@ import br.com.hebert.dto.ImagemDto;
 @Service
 public class DocumentosService {
 
-	private static final String KEY = "AKIA2NLFPRXHF2OFV5XO";
-	private static final String SECRET_KEY = "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";
 	private static final String DIR_NAME = "images/";
+
+	private static final String KEY = "asdasdasdasd";
+	private static final String SECRET_KEY = "asdasdasdasdasd";
+
 
 	/**
 	 * Cria uma instância do client S3 da AWS

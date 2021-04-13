@@ -67,6 +67,12 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.7.0</version>
 		</dependency>
+		
+		<dependency>
+    		<groupId>commons-fileupload</groupId>
+    		<artifactId>commons-fileupload</artifactId>
+    		<version>1.4</version>
+		</dependency>
 
 		<dependency>
 			<groupId>javax.inject</groupId>

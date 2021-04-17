@@ -11,12 +11,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.model.Bucket;
 
 import br.com.hebert.dto.ImagemDto;
@@ -48,8 +50,8 @@ public class PosController {
 		}
 		return new ResponseEntity(HttpStatus.BAD_REQUEST);
 	}
-	
-	@RequestMapping(value = "/isLogged",  produces = {MediaType.APPLICATION_JSON_VALUE}, method = RequestMethod.GET)
+
+	@RequestMapping(value = "/isLogged", produces = { MediaType.APPLICATION_JSON_VALUE }, method = RequestMethod.GET)
 	public ResponseEntity<Object> isLogged() {
 		return ResponseEntity.ok(true);
 	}
@@ -63,7 +65,7 @@ public class PosController {
 		}
 		return new ResponseEntity(HttpStatus.BAD_REQUEST);
 	}
-	
+
 	@ApiOperation(value = "Realiza o upload dos arquivos")
 	@ApiParam(value = "Arquivos", required = true)
 	@PostMapping(value = "/uploadFiles")
@@ -76,12 +78,23 @@ public class PosController {
 		}
 		return new ResponseEntity(HttpStatus.OK);
 	}
-	
+
 	@ApiOperation(value = "Busca os arquivos de imagem")
 	@GetMapping(value = "/getImages")
 	public ResponseEntity getImages() {
 		List<ImagemDto> imagens = this.documentosService.getListaImagens();
 		return new ResponseEntity(imagens, HttpStatus.OK);
 	}
-	
+
+	@ApiOperation(value = "Exclui uma imagem")
+	@PostMapping(value = "/excluirImagem")
+	public ResponseEntity excluirImagem(@RequestBody ImagemDto imagem) {
+		try {
+			this.documentosService.removerImagem(imagem);
+			return new ResponseEntity(HttpStatus.OK);
+		} catch (AmazonServiceException e) {
+			return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

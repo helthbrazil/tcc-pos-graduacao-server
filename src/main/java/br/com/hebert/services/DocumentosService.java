@@ -28,10 +28,12 @@ import br.com.hebert.dto.ImagemDto;
 public class DocumentosService {
 
 	private static final String DIR_NAME = "images/";
-
-	private static final String KEY = "asdasdasdasd";
+	private static final String BUCKET_NAME = "gallerypos";
+	
+	
+	private static final String KEY = "asdasdasdasd"; 
 	private static final String SECRET_KEY = "asdasdasdasdasd";
-
+	 
 
 	/**
 	 * Cria uma instância do client S3 da AWS
@@ -80,16 +82,21 @@ public class DocumentosService {
 			fos.close();
 			AmazonS3 s3Client = logginAWS();
 			ObjectMetadata obj = new ObjectMetadata();
-			s3Client.putObject(new PutObjectRequest("gallerypos", DIR_NAME + "" + file.getOriginalFilename(),
+			s3Client.putObject(new PutObjectRequest(this.BUCKET_NAME, DIR_NAME + "" + file.getOriginalFilename(),
 					file.getInputStream(), obj).withCannedAcl(CannedAccessControlList.PublicRead));
 		}
 		System.out.println(files);
 	}
 
+	public void removerImagem(ImagemDto imagemDto) {
+		AmazonS3 s3Client = logginAWS();
+		s3Client.deleteObject(this.BUCKET_NAME, imagemDto.getId());
+	}
+
 	public List<ImagemDto> getListaImagens() {
 		AmazonS3 s3Client = logginAWS();
-		List<ImagemDto> imagens = new ArrayList<>();	
-		ObjectListing listing = s3Client.listObjects("gallerypos");
+		List<ImagemDto> imagens = new ArrayList<>();
+		ObjectListing listing = s3Client.listObjects(this.BUCKET_NAME);
 		List<S3ObjectSummary> summaries = listing.getObjectSummaries();
 
 		while (listing.isTruncated()) {
@@ -103,7 +110,7 @@ public class DocumentosService {
 			imagem.setSrc(String.format("https://gallerypos.s3-sa-east-1.amazonaws.com/%s", imagem.getId()));
 			imagens.add(imagem);
 		});
-		
+
 		return imagens;
 	}
 
